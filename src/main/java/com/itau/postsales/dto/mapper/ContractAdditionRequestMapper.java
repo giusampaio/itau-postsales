@@ -29,7 +29,7 @@ public class ContractAdditionRequestMapper {
         return new Contract(
                 contract.getContractId(),
                 contract.getCustomerCpfCnpj(),
-                contract.getContractDate(),
+                contract.getContractingDate(),
                 contract.getActive(),
                 contract.getOverdueInstallments()
         );

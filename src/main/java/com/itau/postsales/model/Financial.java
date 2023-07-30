@@ -3,15 +3,17 @@ package com.itau.postsales.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
-public class Financial {
+public class Financial  {
 
-    private String calculationDate;
+    private Date calculationDate;
 
     private String calculationType;
 
-    private Float totalValue;
+    private Double totalValue;
 
     private Integer installmentsQuantity;
 
@@ -19,5 +21,5 @@ public class Financial {
 
     private Integer paymentDay;
 
-    private Float interestRatePercentage;
+    private Double interestRatePercentage;
 }

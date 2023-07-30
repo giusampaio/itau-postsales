@@ -17,12 +17,16 @@ public class FeesApiService {
     FeesApiClient feesClient;
 
     public CalculateFeeResponseDTO calculateTax(Integer quantity, Double value) {
+
         CalculateFeeRequestDTO request = this.getRequest(quantity, value);
+
         return this.feesClient.feeCalculation(request);
     }
 
     public CalculateFeeRequestDTO getRequest(Integer quantity, Double value) {
-        return new CalculateFeeRequestDTO(this.getContractRequest(quantity, value));
+        return new CalculateFeeRequestDTO(
+                this.getContractRequest(quantity, value)
+        );
     }
 
     public ContractFeeRequestDTO getContractRequest(Integer quantity, Double value) {
@@ -32,9 +36,5 @@ public class FeesApiService {
                 quantity,
                 value
         );
-    }
-
-    private void requestApi() {
-
     }
 }

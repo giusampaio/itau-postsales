@@ -5,11 +5,17 @@ import lombok.Getter;
 @Getter
 public enum CalculationType {
 
-    CONTRACTING("CONTRATACAO");
+    CONTRACTING("CONTRATACAO"),
+    ADDITION("ADITAMENTO");
 
     private final String type;
 
     CalculationType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return type;
     }
 }

@@ -1,19 +1,23 @@
 package com.itau.postsales.dto.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class FinancialRequestDTO {
 
     @JsonProperty("data_calculo")
-    private String calculationDate;
+    @JsonFormat(pattern="yyyy-MM-dd", timezone="America/Sao_Paulo")
+    private Date calculationDate;
 
     @JsonProperty("tipo_calculo")
     private String calculationType;
 
     @JsonProperty("valor_total")
-    private Float totalValue;
+    private Double totalValue;
 
     @JsonProperty("quantidade_parcelas")
     private Integer installmentsQuantity;
@@ -25,5 +29,5 @@ public class FinancialRequestDTO {
     private Integer paymentDay;
 
     @JsonProperty("percentual_taxa_juro")
-    private Float interestRatePercentage;
+    private Double interestRatePercentage;
 }

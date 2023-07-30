@@ -7,8 +7,8 @@ import lombok.Data;
 public class FeeCalculationDTO {
 
     @JsonProperty("percentual_juros")
-    private String feePercent;
+    private Double feePercent;
 
     @JsonProperty("valor_total")
-    private String totalValue;
+    private Double totalValue;
 }

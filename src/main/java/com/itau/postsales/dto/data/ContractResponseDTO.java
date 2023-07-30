@@ -1,29 +1,29 @@
 package com.itau.postsales.dto.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.Data;
+import java.util.Date;
 
 @Data
-public class ContractRequestDTO {
-
-    @NotEmpty
+public class ContractResponseDTO {
+    
     @JsonProperty("id_contrato")
     private Integer contractId;
+    
+    @JsonProperty("ultimo_digito_contrato")
+    private Integer contractLastDigit;
 
-    @NotEmpty
+    @JsonProperty("data_contratacao")
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date contractingDate;
+    
     @JsonProperty("numero_cpf_cnpj_cliente")
     private String customerCpfCnpj;
-
-    @NotEmpty
-    @JsonProperty("data_contratacao")
-    private String contractingDate;
-
-    @NotEmpty
+    
     @JsonProperty("ativo")
     private Boolean active;
-
-    @NotEmpty
+    
     @JsonProperty("parcelas_em_atraso")
     private Boolean overdueInstallments;
 }
