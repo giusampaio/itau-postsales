@@ -1,8 +1,11 @@
 package com.itau.postsales.dto.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+
+import java.util.Date;
 
 @Data
 public class ContractRequestDTO {
@@ -17,7 +20,8 @@ public class ContractRequestDTO {
 
     @NotEmpty
     @JsonProperty("data_contratacao")
-    private String contractingDate;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date contractingDate;
 
     @NotEmpty
     @JsonProperty("ativo")

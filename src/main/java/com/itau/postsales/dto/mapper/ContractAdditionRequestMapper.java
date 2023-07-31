@@ -1,7 +1,7 @@
 package com.itau.postsales.dto.mapper;
 
 import com.itau.postsales.dto.data.ContractRequestDTO;
-import com.itau.postsales.dto.data.FinancialRequestDTO;
+import com.itau.postsales.dto.data.FinancialDTO;
 import com.itau.postsales.dto.data.InstallmentsQuantityDTO;
 import com.itau.postsales.dto.data.NewPaymentDayDTO;
 import com.itau.postsales.dto.request.InstallmentsQuantityRequestDTO;
@@ -35,14 +35,14 @@ public class ContractAdditionRequestMapper {
         );
     }
 
-    private List<Financial> toFinancials(List<FinancialRequestDTO> financials) {
+    private List<Financial> toFinancials(List<FinancialDTO> financials) {
         return financials
                 .stream()
                 .map(this::toFinancial)
                 .collect(Collectors.toList());
     }
 
-    private Financial toFinancial(FinancialRequestDTO request) {
+    private Financial toFinancial(FinancialDTO request) {
         return new Financial(
                 request.getCalculationDate(),
                 request.getCalculationType(),

@@ -1,5 +1,7 @@
 package com.itau.postsales.controller;
 
+import com.itau.postsales.dto.data.ContractResponseDTO;
+import com.itau.postsales.dto.response.InstallmentsQuantityResponseDTO;
 import org.springframework.web.bind.annotation.*;
 import com.itau.postsales.dto.mapper.ContractAdditionRequestMapper;
 import com.itau.postsales.dto.request.InstallmentsQuantityRequestDTO;
@@ -18,7 +20,7 @@ public class ContractAdditionController {
     private ContractAdditionRequestMapper mapper;
 
     @PostMapping
-    public @ResponseBody String changeInstallmentsQuantity(
+    public @ResponseBody InstallmentsQuantityResponseDTO changeInstallmentsQuantity(
             @RequestBody InstallmentsQuantityRequestDTO request
     ) {
         return this.changeService.changeQuantity(request);

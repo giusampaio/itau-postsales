@@ -75,6 +75,6 @@ public class ValidationService {
         Integer installments = addition.getInstallmentsQuantity();
         Integer payment = addition.getNewPaymentDay();
 
-        return installments == null || payment == null ? false : true;
+        return installments != null && payment != null;
     }
 }

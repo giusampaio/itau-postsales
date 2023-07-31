@@ -1,77 +1,84 @@
 package com.itau.postsales.service;
 
-import com.itau.postsales.dto.mapper.ContractAdditionRequestMapper;
-import com.itau.postsales.dto.request.InstallmentsQuantityRequestDTO;
-import com.itau.postsales.dto.response.CalculateFeeResponseDTO;
-import com.itau.postsales.enums.CalculationType;
-import com.itau.postsales.exception.BusinessException;
-import com.itau.postsales.model.ContractAddition;
-import com.itau.postsales.model.Financial;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import com.itau.postsales.model.Financial;
+import org.springframework.stereotype.Service;
+import com.itau.postsales.enums.CalculationType;
+import com.itau.postsales.model.ContractAddition;
+import com.itau.postsales.exception.BusinessException;
+import com.itau.postsales.dto.mapper.ContractAdditionMapper;
+import com.itau.postsales.dto.response.CalculateFeeResponseDTO;
+import com.itau.postsales.dto.request.InstallmentsQuantityRequestDTO;
+import com.itau.postsales.dto.response.InstallmentsQuantityResponseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class ContractAdditionService {
 
     @Autowired
-    ContractAdditionRequestMapper additionMapper;
+    private ContractAdditionMapper mapper;
 
     @Autowired
-    ValidationService validationService;
+    private ValidationService validation;
 
     @Autowired
-    FeesApiService feesService;
+    private FeesApiService feesApi;
 
-    public String changeQuantity(InstallmentsQuantityRequestDTO request) throws BusinessException {
+    public InstallmentsQuantityResponseDTO changeQuantity(
+            InstallmentsQuantityRequestDTO request
+    ) throws BusinessException {
 
         ContractAddition addition = this.getOrFail(request);
-        CalculateFeeResponseDTO fee = this.getFee(addition);
-        ContractAddition response = this.addQuantity(addition, fee);
+        ContractAddition response = this.addQuantity(addition);
 
-        return response.toString();
+        return this.mapper.response().toResponse(response);
     }
 
     private ContractAddition getOrFail(InstallmentsQuantityRequestDTO request) throws BusinessException {
 
-        ContractAddition contractAddition = this.additionMapper.toEntity(request);
-        this.validationService.validateInstallmentsQuantity(contractAddition);
+        ContractAddition contractAddition = this.mapper.request().toEntity(request);
+        this.validation.validateInstallmentsQuantity(contractAddition);
 
         return contractAddition;
     }
 
     private CalculateFeeResponseDTO getFee(ContractAddition contractAddition) {
-        return this.feesService.calculateTax(
+        return this.feesApi.calculateTax(
                 contractAddition.getAddition().getInstallmentsQuantity(),
                 contractAddition.getFinancials().get(0).getTotalValue()
         );
     }
 
-    private ContractAddition addQuantity(ContractAddition contractAddition, CalculateFeeResponseDTO fee) {
+    private ContractAddition addQuantity(ContractAddition contractAddition) {
 
         List<Financial> financials = contractAddition.getFinancials();
-        Integer installments = contractAddition.getAddition().getInstallmentsQuantity() - 2;
         Financial financial = financials.get(0);
 
-        Double percent = fee.getData().getFeePercent();
-        Double total = fee.getData().getTotalValue();
-
-        Financial addition = new Financial(
-                new Date(),                          //Date calculationDate,
-                CalculationType.ADDITION.toString(), //String calculationType,
-                total,                               //Double totalValue,
-                installments,                        //Integer installmentsQuantity,
-                financial.getInstallmentsValue(),    // String installmentsValue,
-                financial.getPaymentDay(),           // Integer paymentDay,
-                percent                              //Double interestRatePercentage
-        );
-
+        Financial addition = this.getFinancial(financial, contractAddition);
         financials.add(addition);
-        contractAddition.setFinancials(financials);
 
+        contractAddition.setFinancials(financials);
         return contractAddition;
     }
 
+    private Integer getInstallmentsQuantity(ContractAddition addition) {
+        return addition.getAddition().getInstallmentsQuantity() - 2;
+    }
+
+    private Financial getFinancial(Financial financial, ContractAddition addition) {
+
+        CalculateFeeResponseDTO fee = this.getFee(addition);
+
+        return new Financial(
+                new Date(),
+                CalculationType.ADDITION.toString(),
+                fee.getData().getTotalValue(),
+                this.getInstallmentsQuantity(addition),
+                financial.getInstallmentsValue(),
+                financial.getPaymentDay(),
+                fee.getData().getFeePercent()
+        );
+    }
 }

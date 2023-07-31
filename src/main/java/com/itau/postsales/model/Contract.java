@@ -4,6 +4,8 @@ package com.itau.postsales.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 public class Contract {
@@ -12,7 +14,7 @@ public class Contract {
 
     private String customerCpfCnpj;
 
-    private String contractDate;
+    private Date contractDate;
 
     private Boolean active;
 

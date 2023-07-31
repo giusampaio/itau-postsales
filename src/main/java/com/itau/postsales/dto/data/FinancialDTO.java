@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class FinancialRequestDTO {
+public class FinancialDTO {
 
     @JsonProperty("data_calculo")
     @JsonFormat(pattern="yyyy-MM-dd", timezone="America/Sao_Paulo")

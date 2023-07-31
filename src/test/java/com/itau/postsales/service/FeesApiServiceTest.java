@@ -1,14 +1,14 @@
 package com.itau.postsales.service;
 
 
-import com.itau.postsales.dto.data.ContractFeeRequestDTO;
-import com.itau.postsales.dto.response.CalculateFeeResponseDTO;
-import com.itau.postsales.enums.FeeCalculationType;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import com.itau.postsales.enums.FeeCalculationType;
+import com.itau.postsales.dto.data.ContractFeeRequestDTO;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.itau.postsales.dto.response.CalculateFeeResponseDTO;
 
 import java.util.Date;
 
