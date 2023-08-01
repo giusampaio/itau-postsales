@@ -31,7 +31,7 @@ public class ContractAdditionResponseMapper {
     public ContractResponseDTO toContractResponse(ContractAddition contractAddition) {
         Contract contract = contractAddition.getContract();
         return new ContractResponseDTO(
-                contract.getContractId(),
+                this.getContractId(contract),
                 this.getContractLastDigit(contract),
                 contract.getContractDate(),
                 contract.getCustomerCpfCnpj(),
@@ -67,5 +67,11 @@ public class ContractAdditionResponseMapper {
         String number = contract.getContractId().toString();
         String digit = StringUtils.right(number, 1);
         return Integer.parseInt(digit);
+    }
+
+    private Integer getContractId(Contract contract) {
+        String number = contract.getContractId().toString();
+        String contractId = StringUtils.left(number, number.length() - 1);
+        return Integer.parseInt(contractId);
     }
 }

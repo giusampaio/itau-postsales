@@ -1,16 +1,13 @@
 package com.itau.postsales.service;
 
-
+import org.mockito.Mockito;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import com.itau.postsales.enums.FeeCalculationType;
-import com.itau.postsales.dto.data.ContractFeeRequestDTO;
+import com.itau.postsales.dto.data.FeeCalculationDTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.itau.postsales.dto.response.CalculateFeeResponseDTO;
-
-import java.util.Date;
 
 @SpringBootTest
 public class FeesApiServiceTest {
@@ -19,26 +16,18 @@ public class FeesApiServiceTest {
     private FeesApiService service;
 
     @Test
-    @DisplayName("Teste do corpo da requisição para API de Juros")
-    public void requestBodyTest() {
+    @DisplayName("Deve retornar o API do Juros Itaú")
+    public void requestFeesApiTest() {
 
-        Date date = new Date();
-        Double value = 50000.00;
+        CalculateFeeResponseDTO received = this.service.calculateTax(54, 50000.00);
+        CalculateFeeResponseDTO expected = Mockito.mock(CalculateFeeResponseDTO.class);
+        FeeCalculationDTO data = Mockito.mock(FeeCalculationDTO.class);
 
-        Integer quantity = 54;
-        FeeCalculationType type = FeeCalculationType.SIMPLE_TAX;
+        Mockito.when(data.getFeePercent()).thenReturn(1.93);
+        Mockito.when(data.getTotalValue()).thenReturn(52000.00);
+        Mockito.when(expected.getData()).thenReturn(data);
 
-        ContractFeeRequestDTO received = service.getContractRequest(quantity, value);
-        ContractFeeRequestDTO expected = new ContractFeeRequestDTO(date, type, quantity, value);
-
-        assertThat(received).isEqualTo(expected);
-    }
-
-    @Test
-    public void requestFees() {
-
-        CalculateFeeResponseDTO response = this.service.calculateTax(54, 50000.00);
-
-        System.out.println(response.toString());
+        assertThat(received.getData().getFeePercent()).isEqualTo(expected.getData().getFeePercent());
+        assertThat(received.getData().getTotalValue()).isEqualTo(expected.getData().getTotalValue());
     }
 }

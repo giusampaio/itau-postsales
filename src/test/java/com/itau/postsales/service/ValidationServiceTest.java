@@ -1,11 +1,10 @@
 package com.itau.postsales.service;
 
-import com.itau.postsales.PostSalesApplicationTests;
-import com.itau.postsales.model.ContractAddition;
-import org.mockito.Mockito;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import jakarta.servlet.http.HttpServletRequest;
+import com.itau.postsales.model.ContractAddition;
+import com.itau.postsales.PostSalesApplicationTests;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,9 @@ public class ValidationServiceTest extends PostSalesApplicationTests {
     public void validatePaymentGreaterThan10Days() {
 
         ContractAddition contractAddition = this.getContractAdditionWithPayment();
-        contractAddition.getAddition().setNewPaymentDay(21);
+
+        contractAddition.getAddition().setNewPaymentDay(30);
+        contractAddition.getFinancials().get(0).setPaymentDay(1);
 
         Boolean response = this.validation.isGreaterThanPaymentDay(contractAddition);
         assertThat(response).isTrue();
@@ -58,13 +59,9 @@ public class ValidationServiceTest extends PostSalesApplicationTests {
     @DisplayName("Deve receber um objeto header no formato uuid e validar corretamente")
     public void validateUuidHeaderTest() {
 
-        String field = "itau-pos-venda-teste";
-        String value = "a4ee61a4-3078-11ee-be56-0242ac120002";
-
-        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(request.getHeader(field)).thenReturn(value);
-
+        HttpServletRequest request = this.getHeaderMock();
         Boolean responseV1 = this.validation.isValidItauHeader(request);
+
         assertThat(responseV1).isTrue();
     }
 }
