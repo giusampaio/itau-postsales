@@ -2,8 +2,10 @@ package com.itau.postsales.service;
 
 import com.itau.postsales.exception.BusinessException;
 import com.itau.postsales.model.Addition;
+import com.itau.postsales.model.Contract;
 import com.itau.postsales.model.ContractAddition;
 import com.itau.postsales.model.Financial;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -16,7 +18,9 @@ public class ValidationService {
      *
      * @throws BusinessException
      */
-    public void validateInstallmentsQuantity(ContractAddition contractAddition) throws BusinessException {
+    public void validateInstallmentsQuantity(
+            ContractAddition contractAddition
+    ) throws BusinessException {
 
         if (this.hasBothAddition(contractAddition)) {
             throw new BusinessException();
@@ -29,6 +33,72 @@ public class ValidationService {
         if (! this.isQuantityOfInstallmentsSmaller(contractAddition)) {
             throw new BusinessException();
         }
+    }
+
+    /**
+     * Verifica se as regras de negócio para executar a operação de
+     * nova data de pagamento.
+     *
+     * @param contractAddition
+     * @throws BusinessException
+     */
+    public void validatePaymentDay(
+            ContractAddition contractAddition
+    ) throws BusinessException {
+
+        if (this.hasOverdueInstallments(contractAddition)) {
+            throw new BusinessException();
+        }
+
+        if (this.isContractActivate(contractAddition)) {
+            throw new BusinessException();
+        }
+
+        if (this.isGreaterThanPaymentDay(contractAddition)) {
+            throw new BusinessException();
+        }
+    }
+
+    /**
+     * Verifica se a nova data de pagamento é 10 dias superior do dia atual.
+     * @param contractAddition
+     * @return Boolean
+     */
+    public Boolean isGreaterThanPaymentDay(ContractAddition contractAddition) {
+
+        Addition addition = contractAddition.getAddition();
+        Financial financial = contractAddition.getFinancials().get(0);
+
+        return addition.getNewPaymentDay() > financial.getPaymentDay() + 10;
+    }
+
+    public Boolean isValidItauHeader(String header) {
+       return this.checkUUID(header);
+    }
+
+    /**
+     * Verifica se
+     * @param header
+     * @return
+     */
+    public Boolean isValidItauHeader(HttpServletRequest header) {
+        return this.checkUUID(header.getHeader("itau-pos-venda-teste"));
+    }
+
+    private Boolean checkUUID(String uuid) {
+        String pattern = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
+        return uuid != null && uuid.matches(pattern);
+    }
+
+    /**
+     * Verifica se o contrato tem parcelas em atraso.
+     * Em caso positivo, deve retornar true.
+     *
+     * @param contractAddition
+     * @return Boolean
+     */
+    public Boolean hasOverdueInstallments(ContractAddition contractAddition) {
+        return contractAddition.getContract().getOverdueInstallments();
     }
 
     /**

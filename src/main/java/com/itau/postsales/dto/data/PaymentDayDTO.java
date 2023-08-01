@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class NewPaymentDayDTO {
+public class PaymentDayDTO {
 
     @NotEmpty
     @JsonProperty("nova_data_pagamento")
-    private Integer newPaymentDay;
+    private Integer paymentDay;
 }

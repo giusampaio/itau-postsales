@@ -1,10 +1,8 @@
 package com.itau.postsales.dto.mapper;
 
-import com.itau.postsales.dto.data.ContractRequestDTO;
-import com.itau.postsales.dto.data.FinancialDTO;
-import com.itau.postsales.dto.data.InstallmentsQuantityDTO;
-import com.itau.postsales.dto.data.NewPaymentDayDTO;
+import com.itau.postsales.dto.data.*;
 import com.itau.postsales.dto.request.InstallmentsQuantityRequestDTO;
+import com.itau.postsales.dto.request.PaymentDayChangeRequestDTO;
 import com.itau.postsales.model.Addition;
 import com.itau.postsales.model.Contract;
 import com.itau.postsales.model.ContractAddition;
@@ -18,6 +16,14 @@ import java.util.stream.Collectors;
 public class ContractAdditionRequestMapper {
 
     public ContractAddition toEntity(InstallmentsQuantityRequestDTO request) {
+        return new ContractAddition(
+                this.toContract(request.getContract()),
+                this.toFinancials(request.getFinancials()),
+                this.toAddition(request.getAddition())
+        );
+    }
+
+    public ContractAddition toEntity(PaymentDayChangeRequestDTO request) {
         return new ContractAddition(
                 this.toContract(request.getContract()),
                 this.toFinancials(request.getFinancials()),
@@ -61,10 +67,10 @@ public class ContractAdditionRequestMapper {
         );
     }
 
-    private Addition toAddition(NewPaymentDayDTO request) {
+    private Addition toAddition(PaymentDayDTO request) {
         return new Addition(
                 null,
-                request.getNewPaymentDay()
+                request.getPaymentDay()
         );
     }
 }

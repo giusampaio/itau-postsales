@@ -2,7 +2,7 @@ package com.itau.postsales.dto.mapper;
 
 import com.itau.postsales.dto.data.ContractResponseDTO;
 import com.itau.postsales.dto.data.FinancialDTO;
-import com.itau.postsales.dto.response.InstallmentsQuantityResponseDTO;
+import com.itau.postsales.dto.response.ContractAdditionResponseDTO;
 import com.itau.postsales.model.Contract;
 import com.itau.postsales.model.ContractAddition;
 import com.itau.postsales.model.Financial;
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @Component
 public class ContractAdditionResponseMapper {
 
-    public InstallmentsQuantityResponseDTO toResponse(ContractAddition contractAddition) {
+    public ContractAdditionResponseDTO toResponse(ContractAddition contractAddition) {
 
-        InstallmentsQuantityResponseDTO response = new InstallmentsQuantityResponseDTO();
+        ContractAdditionResponseDTO response = new ContractAdditionResponseDTO();
 
         List<FinancialDTO> financials = this.toFinancialDtoList(contractAddition);
         ContractResponseDTO contract = this.toContractResponse(contractAddition);
@@ -58,6 +58,7 @@ public class ContractAdditionResponseMapper {
         dto.setInstallmentsQuantity(financial.getInstallmentsQuantity());
         dto.setInterestRatePercentage(financial.getInterestRatePercentage());
         dto.setInterestRatePercentage(financial.getInterestRatePercentage());
+        dto.setPaymentDay(financial.getPaymentDay());
 
         return dto;
     }

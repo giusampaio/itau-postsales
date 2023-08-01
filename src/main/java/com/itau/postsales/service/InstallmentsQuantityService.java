@@ -3,32 +3,26 @@ package com.itau.postsales.service;
 
 import java.util.Date;
 import java.util.List;
+
 import com.itau.postsales.model.Financial;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import com.itau.postsales.enums.CalculationType;
 import com.itau.postsales.model.ContractAddition;
 import com.itau.postsales.exception.BusinessException;
-import com.itau.postsales.dto.mapper.ContractAdditionMapper;
 import com.itau.postsales.dto.response.CalculateFeeResponseDTO;
 import com.itau.postsales.dto.request.InstallmentsQuantityRequestDTO;
-import com.itau.postsales.dto.response.InstallmentsQuantityResponseDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.itau.postsales.dto.response.ContractAdditionResponseDTO;
 
 @Service
-public class ContractAdditionService {
+public class InstallmentsQuantityService extends BaseService {
 
-    @Autowired
-    private ContractAdditionMapper mapper;
-
-    @Autowired
-    private ValidationService validation;
-
-    @Autowired
-    private FeesApiService feesApi;
-
-    public InstallmentsQuantityResponseDTO changeQuantity(
-            InstallmentsQuantityRequestDTO request
+    public ContractAdditionResponseDTO changeQuantity(
+            InstallmentsQuantityRequestDTO request,
+            HttpServletRequest headers
     ) throws BusinessException {
+
+        this.validation.isValidItauHeader(headers);
 
         ContractAddition addition = this.getOrFail(request);
         ContractAddition response = this.addQuantity(addition);
@@ -36,7 +30,9 @@ public class ContractAdditionService {
         return this.mapper.response().toResponse(response);
     }
 
-    private ContractAddition getOrFail(InstallmentsQuantityRequestDTO request) throws BusinessException {
+    private ContractAddition getOrFail(
+            InstallmentsQuantityRequestDTO request
+    ) throws BusinessException {
 
         ContractAddition contractAddition = this.mapper.request().toEntity(request);
         this.validation.validateInstallmentsQuantity(contractAddition);

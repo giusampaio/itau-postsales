@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class InstallmentsQuantityResponseDTO {
+public class ContractAdditionResponseDTO {
 
     @JsonProperty("contrato")
     private ContractResponseDTO contract;

@@ -1,11 +1,12 @@
 package com.itau.postsales.controller;
 
-import com.itau.postsales.dto.data.ContractResponseDTO;
-import com.itau.postsales.dto.response.InstallmentsQuantityResponseDTO;
+import com.itau.postsales.dto.request.PaymentDayChangeRequestDTO;
+import com.itau.postsales.dto.response.ContractAdditionResponseDTO;
+import com.itau.postsales.service.PaymentDayChangeService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
-import com.itau.postsales.dto.mapper.ContractAdditionRequestMapper;
 import com.itau.postsales.dto.request.InstallmentsQuantityRequestDTO;
-import com.itau.postsales.service.ContractAdditionService;
+import com.itau.postsales.service.InstallmentsQuantityService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -14,15 +15,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ContractAdditionController {
 
     @Autowired
-    private ContractAdditionService changeService;
+    private InstallmentsQuantityService installment;
 
     @Autowired
-    private ContractAdditionRequestMapper mapper;
+    private PaymentDayChangeService payment;
 
-    @PostMapping
-    public @ResponseBody InstallmentsQuantityResponseDTO changeInstallmentsQuantity(
-            @RequestBody InstallmentsQuantityRequestDTO request
+    @PostMapping("/altera-quantidade-parcelas")
+    public @ResponseBody ContractAdditionResponseDTO changeInstallmentsQuantity(
+            @RequestBody InstallmentsQuantityRequestDTO request,
+            HttpServletRequest headers
     ) {
-        return this.changeService.changeQuantity(request);
+        return this.installment.changeQuantity(request, headers);
+    }
+
+    @PostMapping("/altera-dia-pagamento")
+    public @ResponseBody ContractAdditionResponseDTO changePaymentDay(
+            @RequestBody PaymentDayChangeRequestDTO request,
+            HttpServletRequest headers
+    ) {
+        return this.payment.changePaymentDay(request, headers);
     }
 }
