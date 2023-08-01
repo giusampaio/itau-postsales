@@ -9,7 +9,6 @@
 </p>
 <br>
 
-
 O **giusampaio/itau-postsales** é uma API que possui duas funcionalidades de aditamento de contratos de Itaú.
 Nele é possível realizar alterações no dia de pagamento e na quantidade de parcelas.  
 
@@ -18,6 +17,144 @@ Nele é possível realizar alterações no dia de pagamento e na quantidade de p
 - Java 11
 - Spring Framework 3.1.2
 
+## Alteração de quantidade de parcelas
+**`POST /aditamento/altera-quantidade-parcelas`**
+
+Requisição.
+```http
+POST http://localhost:8080/aditamento/altera-quantidade-parcelas
+itau-pos-venda-teste: {uuid}
+
+{
+    "contrato": {
+        "id_contrato": 37959,
+        "numero_cpf_cnpj_cliente": "66273815089",
+        "data_contratacao": "2023-03-10",
+        "ativo": true,
+        "parcelas_em_atraso": false
+    },
+    "financeiro": [
+        {
+            "data_calculo": "2023-03-10",
+            "tipo_calculo": "CONTRATACAO",
+            "valor_total": 50000.00,
+            "quantidade_parcelas": 50,
+            "valor_parcelas": "1000.00",
+            "dia_pagamento": 23,
+            "percentual_taxa_juro": 1.99
+        }
+    ],
+    "aditamento": {
+        "nova_quantidade_parcelas": 56
+    }
+}   
+```
+
+Resposta
+```http
+HTTP/1.1 200 OK
+
+{
+    "contrato": {
+        "id_contrato": 3795,
+        "ultimo_digito_contrato": 9,
+        "data_contratacao": "2023-03-10",
+        "numero_cpf_cnpj_cliente": "66273815089",
+        "ativo": true,
+        "parcelas_em_atraso": false
+    },
+    "financeiro": [
+        {
+            "data_calculo": "2023-03-10",
+            "tipo_calculo": "CONTRATACAO",
+            "valor_total": 50000.0,
+            "quantidade_parcelas": 50,
+            "valor_parcelas": "1000.00",
+            "dia_pagamento": 23,
+            "percentual_taxa_juro": 1.99
+        },
+        {
+            "data_calculo": "2023-08-01",
+            "tipo_calculo": "ADITAMENTO",
+            "valor_total": 52000.0,
+            "quantidade_parcelas": 54,
+            "valor_parcelas": "1000.00",
+            "dia_pagamento": 23,
+            "percentual_taxa_juro": 1.93
+        }
+    ]
+}
+```
+
+
+## Alteração de quantidade do dia de pagamento
+**`POST /aditamento/altera-dia-pagamento`**
+
+
+Requisição.
+```http
+POST http://localhost:8080/aditamento/altera-quantidade-parcelas
+itau-pos-venda-teste: {uuid}
+
+{
+    "contrato": {
+        "id_contrato": 37959,
+        "numero_cpf_cnpj_cliente": "66273815089",
+        "data_contratacao": "2023-03-10",
+        "ativo": true,
+        "parcelas_em_atraso": false
+    },
+    "financeiro": [
+        {
+            "data_calculo": "2023-03-10",
+            "tipo_calculo": "CONTRATACAO",
+            "valor_total": 50000.00,
+            "quantidade_parcelas": 50,
+            "valor_parcelas": "1000.00",
+            "dia_pagamento": 1,
+            "percentual_taxa_juro": 1.99
+        }
+    ],
+    "aditamento": {
+        "nova_data_pagamento": 10
+    }
+}   
+```
+Resposta
+```http
+HTTP/1.1 200 OK
+
+{
+    "contrato": {
+        "id_contrato": 3795,
+        "ultimo_digito_contrato": 9,
+        "data_contratacao": "2023-03-10",
+        "numero_cpf_cnpj_cliente": "66273815089",
+        "ativo": true,
+        "parcelas_em_atraso": false
+    },
+    "financeiro": [
+        {
+            "data_calculo": "2023-03-10",
+            "tipo_calculo": "CONTRATACAO",
+            "valor_total": 50000.0,
+            "quantidade_parcelas": 50,
+            "valor_parcelas": "1000.00",
+            "dia_pagamento": 1,
+            "percentual_taxa_juro": 1.99
+        },
+        {
+            "data_calculo": "2023-08-01",
+            "tipo_calculo": "ADITAMENTO",
+            "valor_total": 50000.0,
+            "quantidade_parcelas": 50,
+            "valor_parcelas": "1000.00",
+            "dia_pagamento": 10,
+            "percentual_taxa_juro": 1.99
+        }
+    ]
+}
+```
 ## Mock da API de juros.
 Para realizar algumas operações de aditamento, é necessário fazer uma integração com uma API fictícia de 
 juros do Itaú via Feign Client. Atualmente, os valores dessa integração são retornados através de um Mock 
@@ -41,7 +178,6 @@ return this.feesClient.feeCalculation(request);
 ## Adendos sobre escopo da API
 Na documentação da API de aditamento, alguns exemplos e regras de negócios não ficaram tão claros gerando 
 algumas dúvidas. Por esse motivo, abaixo estão algumas esclarecimentos sobre algumas implementações.
-
 
 - No exemplo da documentação da API de alteração de quantidade de parcelas, há uma mudança do dia de 
   pagamento da parcela(Do dia 23 para o dia 4). Entretanto, não há uma explicação do motivo dessa mudança.  
