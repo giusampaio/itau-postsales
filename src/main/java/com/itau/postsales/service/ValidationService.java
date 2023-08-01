@@ -83,14 +83,19 @@ public class ValidationService {
         return addition.getNewPaymentDay() > financial.getPaymentDay() + 10;
     }
 
+    /**
+     * Verifica se o header itaú enviado é valido.
+     * @param header
+     * @returnBoolean
+     */
     public Boolean isValidItauHeader(String header) {
        return this.checkUUID(header);
     }
 
     /**
-     * Verifica se
+     * Verifica se o header itaú enviado é valido.
      * @param header
-     * @return
+     * @returnBoolean
      */
     public Boolean isValidItauHeader(HttpServletRequest header) {
         return this.checkUUID(header.getHeader("itau-pos-venda-teste"));
