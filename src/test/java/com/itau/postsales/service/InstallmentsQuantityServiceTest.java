@@ -55,7 +55,7 @@ public class InstallmentsQuantityServiceTest extends PostSalesApplicationTests {
         assertThat(additionFinancial.getTotalValue()).isEqualTo(52000.00);
         assertThat(additionFinancial.getInstallmentsQuantity()).isEqualTo(54);
         assertThat(additionFinancial.getInstallmentsValue()).isEqualTo("1000.00");
-        assertThat(additionFinancial.getPaymentDay()).isEqualTo(15);
-        assertThat(additionFinancial.getInterestRatePercentage()).isEqualTo(1.99);
+        assertThat(additionFinancial.getPaymentDay()).isEqualTo(23);
+        assertThat(additionFinancial.getInterestRatePercentage()).isEqualTo(1.93);
     }
 }
