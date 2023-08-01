@@ -9,8 +9,8 @@
 </p>
 <br>
 
-O **giusampaio/itau-postsales** é uma API que possui duas funcionalidades de aditamento de contratos de Itaú.
-Nele é possível realizar alterações no dia de pagamento e na quantidade de parcelas.  
+O **giusampaio/itau-postsales** é uma API que oferece duas funcionalidades de aditamento de contratos do Itaú.
+Com ela, é possível realizar alterações no dia de pagamento e na quantidade de parcelas.
 
 ## Requisitos
 
@@ -93,7 +93,7 @@ HTTP/1.1 200 OK
 
 Requisição.
 ```http
-POST http://localhost:8080/aditamento/altera-quantidade-parcelas
+POST http://localhost:8080/altera-dia-pagamento
 itau-pos-venda-teste: {uuid}
 
 {
@@ -176,8 +176,8 @@ return this.feesClient.feeCalculation(request);
 ```
 
 ## Adendos sobre escopo da API
-Na documentação da API de aditamento, alguns exemplos e regras de negócios não ficaram tão claros gerando 
-algumas dúvidas. Por esse motivo, abaixo estão algumas esclarecimentos sobre algumas implementações.
+Na documentação da API de aditamento, alguns exemplos e regras de negócios não ficaram tão claros, gerando 
+algumas dúvidas. Por esse motivo, abaixo estão alguns esclarecimentos sobre algumas implementações.
 
 - No exemplo da documentação da API de alteração de quantidade de parcelas, há uma mudança do dia de 
   pagamento da parcela(Do dia 23 para o dia 4). Entretanto, não há uma explicação do motivo dessa mudança.  
