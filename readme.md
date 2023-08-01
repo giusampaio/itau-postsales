@@ -93,7 +93,7 @@ HTTP/1.1 200 OK
 
 Requisição.
 ```http
-POST http://localhost:8080/aditamento/altera-quantidade-parcelas
+POST http://localhost:8080/altera-dia-pagamento
 itau-pos-venda-teste: {uuid}
 
 {
