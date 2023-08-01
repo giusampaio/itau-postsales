@@ -20,23 +20,26 @@ public class PaymentDayChangeService extends BaseService {
             HttpServletRequest headers
     ) throws BusinessException {
 
-        this.validation.isValidItauHeader(headers);
 
-        ContractAddition contractAddition = this.getOrFail(request);
+        ContractAddition contractAddition = this.getOrFail(request, headers);
         Addition addition = contractAddition.getAddition();
         Integer paymentDay = addition.getNewPaymentDay();
 
         Financial contract = this.getContractFinancial(contractAddition);
         Financial financial = this.getFinancial(contract, paymentDay);
+
         contractAddition.getFinancials().add(financial);
 
         return this.mapper.response().toResponse(contractAddition);
     }
 
-    private ContractAddition getOrFail(PaymentDayChangeRequestDTO request) {
+    private ContractAddition getOrFail(
+            PaymentDayChangeRequestDTO request,
+            HttpServletRequest headers
+    ) {
 
         ContractAddition contractAddition = this.mapper.request().toEntity(request);
-        this.validation.validatePaymentDay(contractAddition);
+        this.validation.validatePaymentDay(contractAddition, headers);
 
         return contractAddition;
     }

@@ -22,20 +22,19 @@ public class InstallmentsQuantityService extends BaseService {
             HttpServletRequest headers
     ) throws BusinessException {
 
-        this.validation.isValidItauHeader(headers);
-
-        ContractAddition addition = this.getOrFail(request);
+        ContractAddition addition = this.getOrFail(request, headers);
         ContractAddition response = this.addQuantity(addition);
 
         return this.mapper.response().toResponse(response);
     }
 
     private ContractAddition getOrFail(
-            InstallmentsQuantityRequestDTO request
+            InstallmentsQuantityRequestDTO request,
+            HttpServletRequest headers
     ) throws BusinessException {
 
         ContractAddition contractAddition = this.mapper.request().toEntity(request);
-        this.validation.validateInstallmentsQuantity(contractAddition);
+        this.validation.validateInstallmentsQuantity(contractAddition, headers);
 
         return contractAddition;
     }

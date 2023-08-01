@@ -1,5 +1,6 @@
 package com.itau.postsales.service;
 
+import com.itau.postsales.enums.BusinessErrorMessage;
 import com.itau.postsales.exception.BusinessException;
 import com.itau.postsales.model.Addition;
 import com.itau.postsales.model.Contract;
@@ -19,19 +20,24 @@ public class ValidationService {
      * @throws BusinessException
      */
     public void validateInstallmentsQuantity(
-            ContractAddition contractAddition
+            ContractAddition contractAddition,
+            HttpServletRequest headers
     ) throws BusinessException {
 
+        if (! this.isValidItauHeader(headers)) {
+            throw new BusinessException(BusinessErrorMessage.INVALID_HEADER);
+        }
+
         if (this.hasBothAddition(contractAddition)) {
-            throw new BusinessException();
+            throw new BusinessException(BusinessErrorMessage.BOTH_ADDITION);
         }
 
         if (! this.isContractActivate(contractAddition)) {
-            throw new BusinessException();
+            throw new BusinessException(BusinessErrorMessage.INACTIVE_CONTRACT);
         }
 
         if (! this.isQuantityOfInstallmentsSmaller(contractAddition)) {
-            throw new BusinessException();
+            throw new BusinessException(BusinessErrorMessage.SMALL_INSTALLMENTS_QUANTITY);
         }
     }
 
@@ -43,19 +49,24 @@ public class ValidationService {
      * @throws BusinessException
      */
     public void validatePaymentDay(
-            ContractAddition contractAddition
+            ContractAddition contractAddition,
+            HttpServletRequest headers
     ) throws BusinessException {
 
-        if (this.hasOverdueInstallments(contractAddition)) {
-            throw new BusinessException();
+        if (! this.isValidItauHeader(headers)) {
+            throw new BusinessException(BusinessErrorMessage.INVALID_HEADER);
         }
 
-        if (this.isContractActivate(contractAddition)) {
-            throw new BusinessException();
+        if (this.hasOverdueInstallments(contractAddition)) {
+            throw new BusinessException(BusinessErrorMessage.OVERDUE_INSTALLMENTS);
+        }
+
+        if (! this.isContractActivate(contractAddition)) {
+            throw new BusinessException(BusinessErrorMessage.INACTIVE_CONTRACT);
         }
 
         if (this.isGreaterThanPaymentDay(contractAddition)) {
-            throw new BusinessException();
+            throw new BusinessException(BusinessErrorMessage.BIG_PAYMENTDAY);
         }
     }
 

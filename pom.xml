@@ -12,7 +12,7 @@
 	<artifactId>postsales</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>postsales</name>
-	<description>Itau Post Sales System</description>
+	<description>Itau Post Sales API</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
